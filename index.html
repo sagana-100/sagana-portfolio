@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sagana M — Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --board: #0c1613;
+    --board-2: #101f1a;
+    --copper: #c8793f;
+    --copper-bright: #e79b5e;
+    --silk: #eef2ee;
+    --silk-dim: #a9b8b0;
+    --trace: #2f4a41;
+    --pad: #5fc9ae;
+    --pad-dim: #3a7a68;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--board);
+    color:var(--silk);
+    font-family:'IBM Plex Sans', sans-serif;
+    font-weight:300;
+    overflow-x:hidden;
+  }
+  ::selection{background:var(--copper); color:var(--board);}
+
+  /* faint pcb grid backdrop */
+  .board-bg{
+    position:fixed; inset:0; z-index:0; pointer-events:none;
+    background-image:
+      linear-gradient(var(--trace) 1px, transparent 1px),
+      linear-gradient(90deg, var(--trace) 1px, transparent 1px);
+    background-size: 42px 42px;
+    opacity:0.08;
+  }
+
+  .wrap{position:relative; z-index:1; max-width:980px; margin:0 auto; padding:0 28px;}
+
+  /* nav */
+  nav{
+    position:sticky; top:0; z-index:50;
+    background:rgba(12,22,19,0.88);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--trace);
+  }
+  nav .wrap{display:flex; align-items:center; justify-content:space-between; padding:16px 28px;}
+  .logo{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:14px; color:var(--pad); letter-spacing:1px;
+  }
+  .logo span{color:var(--copper);}
+  .navlinks{display:flex; gap:26px; list-style:none;}
+  .navlinks a{
+    color:var(--silk-dim); text-decoration:none; font-size:13px;
+    font-family:'IBM Plex Mono', monospace; letter-spacing:0.5px;
+    transition:color .2s;
+  }
+  .navlinks a:hover{color:var(--copper-bright);}
+  .navlinks a:focus-visible, a:focus-visible{outline:2px solid var(--pad); outline-offset:3px;}
+
+  /* hero */
+  header.hero{
+    padding:110px 0 90px;
+    position:relative;
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    color:var(--pad); font-size:13px; letter-spacing:3px;
+    text-transform:uppercase; margin-bottom:18px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .eyebrow::before{
+    content:''; width:26px; height:1px; background:var(--pad);
+  }
+  h1.name{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:700;
+    font-size:clamp(42px, 8vw, 76px);
+    line-height:1.02;
+    letter-spacing:-1px;
+    color:var(--silk);
+  }
+  h1.name .accent{color:var(--copper-bright);}
+  .role-line{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:clamp(14px, 2vw, 18px);
+    color:var(--silk-dim);
+    margin-top:20px;
+    max-width:640px;
+    line-height:1.7;
+  }
+  .contact-row{
+    display:flex; flex-wrap:wrap; gap:14px;
+    margin-top:34px;
+  }
+  .contact-row a, .contact-row span{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12.5px;
+    color:var(--silk);
+    text-decoration:none;
+    border:1px solid var(--trace);
+    padding:9px 16px;
+    border-radius:2px;
+    position:relative;
+    transition:border-color .2s, color .2s;
+    display:inline-flex; align-items:center; gap:8px;
+  }
+  .contact-row a::before{
+    content:''; width:6px; height:6px; border-radius:50%;
+    background:var(--pad-dim); transition:background .2s;
+  }
+  .contact-row a:hover{border-color:var(--pad); color:var(--pad);}
+  .contact-row a:hover::before{background:var(--pad); box-shadow:0 0 6px var(--pad);}
+
+  /* trace divider */
+  .trace-divider{
+    display:flex; align-items:center; gap:10px;
+    margin:0 0 46px;
+  }
+  .trace-divider .node{
+    width:9px; height:9px; border-radius:50%;
+    background:var(--board); border:2px solid var(--copper);
+    flex-shrink:0;
+  }
+  .trace-divider .line{flex:1; height:1px; background:var(--trace);}
+  .trace-divider .label{
+    font-family:'IBM Plex Mono', monospace; font-size:12px;
+    color:var(--copper); letter-spacing:2px; text-transform:uppercase;
+    white-space:nowrap;
+  }
+
+  section{padding:70px 0;}
+  section#about{padding-top:20px;}
+
+  .lede{
+    font-size:17px; line-height:1.85; color:var(--silk);
+    max-width:720px; font-weight:300;
+  }
+  .lede strong{color:var(--pad); font-weight:500;}
+
+  .interest-grid{
+    display:flex; flex-wrap:wrap; gap:12px; margin-top:30px;
+  }
+  .chip{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12.5px; padding:9px 14px;
+    border:1px solid var(--trace); border-radius:2px;
+    color:var(--silk-dim);
+    position:relative;
+  }
+  .chip::before{content:'▸ '; color:var(--copper);}
+
+  /* skills - component board style */
+  .skills-grid{
+    display:grid; grid-template-columns:1fr 1fr; gap:40px; margin-top:10px;
+  }
+  @media (max-width:680px){ .skills-grid{grid-template-columns:1fr;} }
+  .skill-block h3{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:13px; letter-spacing:2px; text-transform:uppercase;
+    color:var(--copper-bright); margin-bottom:16px;
+    padding-bottom:10px; border-bottom:1px solid var(--trace);
+  }
+  .skill-rows{display:flex; flex-direction:column; gap:13px;}
+  .skill-row{display:flex; gap:14px; font-size:14.5px; align-items:baseline;}
+  .skill-row .k{
+    font-family:'IBM Plex Mono', monospace; font-size:11.5px;
+    color:var(--silk-dim); min-width:88px; flex-shrink:0; padding-top:2px;
+  }
+  .skill-row .v{color:var(--silk); line-height:1.6;}
+
+  /* projects */
+  .project-card{
+    border:1px solid var(--trace);
+    border-radius:3px;
+    padding:28px 26px;
+    margin-bottom:20px;
+    position:relative;
+    transition:border-color .25s, transform .25s;
+    background:linear-gradient(180deg, rgba(95,201,174,0.03), transparent);
+  }
+  .project-card:hover{border-color:var(--pad-dim); transform:translateY(-2px);}
+  .project-card::before{
+    content:''; position:absolute; top:-1px; left:22px;
+    width:34px; height:2px; background:var(--copper);
+  }
+  .project-head{
+    display:flex; justify-content:space-between; align-items:baseline;
+    flex-wrap:wrap; gap:8px; margin-bottom:12px;
+  }
+  .project-head h3{
+    font-family:'Space Grotesk', sans-serif; font-weight:600; font-size:19px; color:var(--silk);
+  }
+  .project-head .date{
+    font-family:'IBM Plex Mono', monospace; font-size:11.5px; color:var(--pad);
+  }
+  .project-card p{font-size:14.5px; line-height:1.75; color:var(--silk-dim); margin-top:6px;}
+  .project-card p + p{margin-top:8px;}
+
+  /* timeline for education */
+  .timeline{position:relative; padding-left:28px; margin-top:10px;}
+  .timeline::before{
+    content:''; position:absolute; left:4px; top:6px; bottom:6px; width:1px;
+    background:var(--trace);
+  }
+  .tl-item{position:relative; padding-bottom:32px;}
+  .tl-item:last-child{padding-bottom:0;}
+  .tl-item::before{
+    content:''; position:absolute; left:-28px; top:4px;
+    width:9px; height:9px; border-radius:50%;
+    background:var(--board); border:2px solid var(--pad);
+  }
+  .tl-item h3{font-family:'Space Grotesk', sans-serif; font-size:17px; font-weight:600; color:var(--silk);}
+  .tl-item .meta{
+    font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--silk-dim);
+    margin-top:4px; display:flex; gap:14px; flex-wrap:wrap;
+  }
+  .tl-item .meta .score{color:var(--copper-bright);}
+
+  /* certs + achievements */
+  .list-clean{list-style:none; display:flex; flex-direction:column; gap:14px;}
+  .list-clean li{
+    display:flex; gap:14px; font-size:14.5px; line-height:1.6; color:var(--silk);
+    align-items:flex-start;
+  }
+  .list-clean li::before{
+    content:'01'; counter-increment:none;
+    font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--copper);
+    border:1px solid var(--trace); padding:3px 6px; border-radius:2px; flex-shrink:0; margin-top:1px;
+  }
+  .list-clean.certs li:nth-child(1)::before{content:'C.01';}
+  .list-clean.certs li:nth-child(2)::before{content:'C.02';}
+  .list-clean.ach li:nth-child(1)::before{content:'★ 1ST';}
+  .list-clean.ach li:nth-child(2)::before{content:'★ 3RD';}
+
+  h2.sec-title{
+    font-family:'Space Grotesk', sans-serif; font-weight:700;
+    font-size:clamp(24px, 4vw, 32px); color:var(--silk); margin-bottom:8px;
+  }
+
+  footer{
+    border-top:1px solid var(--trace);
+    padding:44px 0 60px;
+    text-align:center;
+  }
+  footer p{
+    font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--silk-dim);
+  }
+  footer .foot-links{margin-top:14px; display:flex; gap:20px; justify-content:center;}
+  footer a{color:var(--pad); text-decoration:none; font-family:'IBM Plex Mono', monospace; font-size:12.5px;}
+  footer a:hover{color:var(--copper-bright);}
+
+  .fade-up{
+    opacity:0; transform:translateY(18px);
+    animation:fadeUp .7s ease forwards;
+  }
+  @keyframes fadeUp{ to{opacity:1; transform:translateY(0);} }
+
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    .fade-up{animation:none; opacity:1; transform:none;}
+  }
+</style>
+</head>
+<body>
+
+<div class="board-bg"></div>
+
+<nav>
+  <div class="wrap">
+    <div class="logo">SAGANA<span>.M</span></div>
+    <ul class="navlinks">
+      <li><a href="#about">About</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#education">Education</a></li>
+      <li><a href="#more">More</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  <header class="hero">
+    <div class="eyebrow">EEE Undergraduate · Class of 2027</div>
+    <h1 class="name">Sagana M<br><span class="accent">builds at the edge</span><br>of circuits &amp; code.</h1>
+    <p class="role-line">Electrical &amp; Electronics Engineering student focused on frontend web development, software, and embedded systems — reverse-engineering hardware and shipping clean interfaces alike.</p>
+    <div class="contact-row">
+      <a href="mailto:saganamanigandan2006@gmail.com">saganamanigandan2006@gmail.com</a>
+      <a href="tel:+918098941564">+91 8098941564</a>
+      <a href="https://www.linkedin.com/in/sagana-m" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://github.com/sagana-100" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </header>
+
+  <section id="about">
+    <div class="trace-divider"><div class="node"></div><div class="line"></div><div class="label">Objective</div></div>
+    <p class="lede fade-up">
+      Motivated <strong>Electrical and Electronics Engineering</strong> undergraduate with a keen interest in software and web development. Seeking an entry-level opportunity to apply technical skills, sharpen problem-solving, and contribute to organizational growth through continuous learning.
+    </p>
+    <div class="interest-grid fade-up">
+      <div class="chip">Frontend Web Development</div>
+      <div class="chip">Software Development</div>
+      <div class="chip">Embedded Systems</div>
+    </div>
+  </section>
+
+  <section id="skills">
+    <div class="trace-divider"><div class="node"></div><div class="line"></div><div class="label">Skills</div></div>
+    <div class="skills-grid">
+      <div class="skill-block fade-up">
+        <h3>Technical</h3>
+        <div class="skill-rows">
+          <div class="skill-row"><span class="k">Languages</span><span class="v">Java, C, MySQL</span></div>
+          <div class="skill-row"><span class="k">Tools</span><span class="v">Visual Studio Code, Turbo C, MS Excel</span></div>
+          <div class="skill-row"><span class="k">Web</span><span class="v">HTML, CSS</span></div>
+        </div>
+      </div>
+      <div class="skill-block fade-up">
+        <h3>Soft Skills</h3>
+        <div class="skill-rows">
+          <div class="skill-row"><span class="k">—</span><span class="v">Good communication skills</span></div>
+          <div class="skill-row"><span class="k">—</span><span class="v">Teamwork and collaboration</span></div>
+          <div class="skill-row"><span class="k">—</span><span class="v">Adaptability</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="projects">
+    <div class="trace-divider"><div class="node"></div><div class="line"></div><div class="label">Projects</div></div>
+
+    <div class="project-card fade-up">
+      <div class="project-head">
+        <h3>Automatic Water Level Controller</h3>
+        <span class="date">08.09.25 — 28.11.25</span>
+      </div>
+      <p>A reverse-engineering project analyzing the circuit design, sensor interfacing, and control logic of an existing automatic water level controller to understand its full functionality.</p>
+      <p>Studied how sensors, relay circuits, and control units interact to drive automatic pump operation and maintain optimal tank levels.</p>
+    </div>
+
+    <div class="project-card fade-up">
+      <div class="project-head">
+        <h3>Responsive Login &amp; Signup Forms</h3>
+      </div>
+      <p>Developed responsive login and signup forms using HTML and CSS.</p>
+    </div>
+  </section>
+
+  <section id="education">
+    <div class="trace-divider"><div class="node"></div><div class="line"></div><div class="label">Education</div></div>
+    <div class="timeline">
+      <div class="tl-item fade-up">
+        <h3>B.E, Electrical and Electronic Engineering</h3>
+        <div class="meta">
+          <span>Dr. Mahalingam College of Engineering and Technology, Pollachi</span>
+          <span class="score">8.08 CGPA</span>
+          <span>June 2027 · Till 5th semester</span>
+        </div>
+      </div>
+      <div class="tl-item fade-up">
+        <h3>HSC</h3>
+        <div class="meta">
+          <span>Sathya Sai Matriculation Higher Secondary School, Ooty</span>
+          <span class="score">80.5%</span>
+          <span>March 2023</span>
+        </div>
+      </div>
+      <div class="tl-item fade-up">
+        <h3>SSLC</h3>
+        <div class="meta">
+          <span>Sathya Sai Matriculation Higher Secondary, Ooty</span>
+          <span class="score">Pass</span>
+          <span>March 2021</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="more">
+    <div class="trace-divider"><div class="node"></div><div class="line"></div><div class="label">Certifications</div></div>
+    <ul class="list-clean certs fade-up">
+      <li>Completed Linguaskill Examination (B1 Level) — from Cambridge University.</li>
+      <li>Completed NPTEL course on Introduction to Internet of Things.</li>
+    </ul>
+  </section>
+
+  <section>
+    <div class="trace-divider"><div class="node"></div><div class="line"></div><div class="label">Achievements</div></div>
+    <ul class="list-clean ach fade-up">
+      <li>Secured 1st place in Poster Presentation on Energy Conservation Day, an intra-college event organized by Ignite Association, MCET.</li>
+      <li>Secured 3rd place in Paper Presentation at Innovathon, conducted by the Department of EEE, MCET, under Student Research Council (AVERA).</li>
+    </ul>
+  </section>
+
+</div>
+
+<footer>
+  <p>Designed &amp; built with intent — Sagana M, 2026</p>
+  <div class="foot-links">
+    <a href="mailto:saganamanigandan2006@gmail.com">Email</a>
+    <a href="https://www.linkedin.com/in/sagana-m" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="https://github.com/sagana-100" target="_blank" rel="noopener">GitHub</a>
+  </div>
+</footer>
+
+<script>
+  const observer = new IntersectionObserver((entries)=>{
+    entries.forEach((entry, i)=>{
+      if(entry.isIntersecting){
+        entry.target.style.animationDelay = (i*0.05)+'s';
+        entry.target.style.opacity = '';
+        entry.target.classList.add('fade-up');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, {threshold:0.15});
+  document.querySelectorAll('.fade-up').forEach(el=>{
+    el.style.opacity = '0';
+    observer.observe(el);
+  });
+</script>
+
+</body>
+</html>
